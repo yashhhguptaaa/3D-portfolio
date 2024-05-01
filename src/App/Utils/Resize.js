@@ -1,17 +1,21 @@
-import { sizesStore } from "./Store";
+import * as THREE from "three";
+import App from "../App.js";
 
-export default class Resize {
-    constructor() {
+export default class Loop {
+  constructor() {
+    this.app = new App();
+    this.camera = this.app.camera;
+    this.renderer = this.app.renderer;
+    this.world = this.app.world;
 
-        const { setState } = sizesStore
+    this.loop();
+  }
 
-        window.addEventListener("resize", () => {
-            setState({
-                width: window.innerWidth,
-                height: window.innerHeight,
-                pixelRatio: Math.min(window.devicePixelRatio, 2),
-            })
-          });
+  loop() {
+    this.world.loop();
 
-    }
+    this.camera.loop();
+    this.renderer.loop();
+    window.requestAnimationFrame(() => this.loop());
+  }
 }
